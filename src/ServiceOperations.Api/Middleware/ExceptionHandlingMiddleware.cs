@@ -57,8 +57,9 @@ public sealed class ExceptionHandlingMiddleware(
     {
         Status = status, Title = title, Detail = detail
     };
-
-    private static async Task WriteAsync(HttpContext context, ProblemDetails details)
+    
+    private static async Task WriteAsync<TDetails>(HttpContext context, TDetails details)
+    where TDetails : ProblemDetails
     {
         context.Response.StatusCode = details.Status ?? StatusCodes.Status500InternalServerError;
         context.Response.ContentType = "application/problem+json";
